@@ -2,7 +2,9 @@ package com.flyco.tablayout;
 
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +17,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyco.tablayout.listener.CustomTabEntity;
+import com.flyco.tablayout.internet.ImageLoaderListener;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.flyco.tablayout.utils.FragmentChangeManager;
 import com.flyco.tablayout.utils.UnreadMsgUtils;
@@ -249,7 +253,11 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
 
         updateTabStyles();
     }
-
+    ImageLoaderListener imageLoaderListener;
+    public CommonTabLayout setImageLoaderListener(ImageLoaderListener imageLoaderListener){
+        this.imageLoaderListener = imageLoaderListener;
+        return this;
+    }
     /**
      * 创建并添加tab
      */
@@ -262,12 +270,20 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             tv_tab_title.setText(mTabEntitys.get(position).getTabTitle());
         }
         ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
-        iv_tab_icon.setImageResource(mTabEntitys.get(position).getTabUnselectedIcon());
+        if (mTabEntitys.get(position).getBottom() != null){
+            if (imageLoaderListener != null) imageLoaderListener.loadUnSelectImage(iv_tab_icon,mTabEntitys.get(position).getBottom().getBgicon(),mTabEntitys.get(position).getTabUnselectedIcon());
+        }else{
+            iv_tab_icon.setImageResource(mTabEntitys.get(position).getTabUnselectedIcon());
+        }
 
         tabView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
+                if (mTabEntitys.get(position).getBottom() != null && mTabEntitys.get(position).getBottom().getStatus() == 0){
+                    showDialog(mTabEntitys.get(position).getBottom().getRemind()+"");
+                    return;
+                }
                 if (mCurrentTab != position) {
                     setCurrentTab(position);
                     if (mListener != null) {
@@ -278,6 +294,13 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
                         mListener.onTabReselect(position);
                     }
                 }
+            }
+            private void showDialog(String message) {
+                AlertDialog dialog = new AlertDialog.Builder(getContext(),android.R.style.Theme_DeviceDefault_Dialog_Alert)
+                        .setMessage(message)
+                        .setPositiveButton("确定",null)
+                        .create();
+                dialog.show();
             }
         });
 
@@ -313,7 +336,14 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             if (mIconVisible) {
                 iv_tab_icon.setVisibility(View.VISIBLE);
                 CustomTabEntity tabEntity = mTabEntitys.get(i);
-                iv_tab_icon.setImageResource(i == mCurrentTab ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
+                if (tabEntity.getBottom() !=null){
+                    if (imageLoaderListener != null) {
+                        if (i == mCurrentTab){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
+                        else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
+                    }
+                }else{
+                    iv_tab_icon.setImageResource(i == mCurrentTab ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
+                }
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconWidth,
                         mIconHeight <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconHeight);
@@ -342,7 +372,14 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             tab_title.setTextColor(isSelect ? mTextSelectColor : mTextUnselectColor);
             ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
             CustomTabEntity tabEntity = mTabEntitys.get(i);
-            iv_tab_icon.setImageResource(isSelect ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
+            if (tabEntity.getBottom() != null){
+                if (imageLoaderListener != null) {
+                    if (isSelect){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
+                    else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
+                }
+            }else {
+                iv_tab_icon.setImageResource(isSelect ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
+            }
             if (mTextBold == TEXT_BOLD_WHEN_SELECT) {
                 tab_title.getPaint().setFakeBoldText(isSelect);
             }

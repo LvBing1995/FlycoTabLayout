@@ -40,9 +40,9 @@
             tl:tl_indicator_height="0dp"
             tl:tl_textSelectColor="#2C97DE"
             tl:tl_textUnselectColor="#66000000"
-            tl:tl_textsize="12sp"
+            tl:tl_textsize="0sp"
             tl:tl_underline_color="#DDDDDD"
-            tl:tl_underline_height="1dp"/>
+            tl:tl_underline_height="0dp"/>
 
         <FrameLayout
             android:id="@+id/fl_change"
@@ -127,5 +127,15 @@
             tl:tl_indicator_margin_right="5dp"
             tl:tl_indicator_style="BLOCK"
             tl:tl_textsize="14sp"/>
+        <com.flyco.tablayout.CommonTabLayout
+            android:id="@+id/common_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="#fff"
+            tl:tl_iconHeight="38dp"
+            tl:tl_iconWidth="38dp"
+            tl:tl_indicator_height="0dp"
+            tl:tl_textsize="0sp"
+            tl:tl_underline_height="1dp" />
     </LinearLayout>
 </ScrollView>

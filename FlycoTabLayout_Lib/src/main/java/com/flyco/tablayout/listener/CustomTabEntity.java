@@ -2,6 +2,8 @@ package com.flyco.tablayout.listener;
 
 import android.support.annotation.DrawableRes;
 
+import com.flyco.tablayout.internet.Bottomicons;
+
 public interface CustomTabEntity {
     String getTabTitle();
 
@@ -10,4 +12,7 @@ public interface CustomTabEntity {
 
     @DrawableRes
     int getTabUnselectedIcon();
+
+    Bottomicons getBottom();
+
 }

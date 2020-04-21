@@ -1,16 +1,22 @@
 package com.flyco.tablayoutsamples.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.flyco.tablayout.CommonTabLayout;
+import com.flyco.tablayout.internet.Bottomicons;
+import com.flyco.tablayout.internet.ImageLoader;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.flyco.tablayout.utils.UnreadMsgUtils;
@@ -18,8 +24,14 @@ import com.flyco.tablayout.widget.MsgView;
 import com.flyco.tablayoutsamples.R;
 import com.flyco.tablayoutsamples.entity.TabEntity;
 import com.flyco.tablayoutsamples.utils.ViewFindUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CommonTabActivity extends AppCompatActivity {
@@ -45,7 +57,9 @@ public class CommonTabActivity extends AppCompatActivity {
     private CommonTabLayout mTabLayout_6;
     private CommonTabLayout mTabLayout_7;
     private CommonTabLayout mTabLayout_8;
-
+    private CommonTabLayout commonTabLayout;
+    List<Bottomicons> selectList;
+    List<Bottomicons> unSelectList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,16 +70,20 @@ public class CommonTabActivity extends AppCompatActivity {
             mFragments2.add(SimpleCardFragment.getInstance("Switch Fragment " + title));
         }
 
-
+        selectList = new ArrayList<>();
+        unSelectList = new ArrayList<>();
+        String jsonString = getJson("haha",this);
+        final List<Bottomicons> list = new Gson().fromJson(jsonString,new TypeToken<List<Bottomicons>>(){}.getType());
         for (int i = 0; i < mTitles.length; i++) {
             mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
         }
-
+        
         mDecorView = getWindow().getDecorView();
         mViewPager = ViewFindUtils.find(mDecorView, R.id.vp_2);
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         /** with nothing */
         mTabLayout_1 = ViewFindUtils.find(mDecorView, R.id.tl_1);
+        commonTabLayout = ViewFindUtils.find(mDecorView, R.id.common_tab_layout);
         /** with ViewPager */
         mTabLayout_2 = ViewFindUtils.find(mDecorView, R.id.tl_2);
         /** with Fragments */
@@ -89,7 +107,17 @@ public class CommonTabActivity extends AppCompatActivity {
         mTabLayout_6.setTabData(mTabEntities);
         mTabLayout_7.setTabData(mTabEntities);
         mTabLayout_8.setTabData(mTabEntities);
-
+        commonTabLayout.setTabData(mTabEntities);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mTabEntities.clear();
+                for (int i = 0; i < mTitles.length; i++) {
+                    mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i],list.get(i)));
+                }
+                commonTabLayout.setImageLoaderListener(new ImageLoader()).setTabData(mTabEntities);
+            }
+        },1000);
         mTabLayout_3.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -202,5 +230,23 @@ public class CommonTabActivity extends AppCompatActivity {
     protected int dp2px(float dp) {
         final float scale = mContext.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+    public static String getJson(String fileName,Context context) {
+        //将json数据变成字符串
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            //获取assets资源管理器
+            AssetManager assetManager = context.getAssets();
+            //通过管理器打开文件并读取
+            BufferedReader bf = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName)));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 }
