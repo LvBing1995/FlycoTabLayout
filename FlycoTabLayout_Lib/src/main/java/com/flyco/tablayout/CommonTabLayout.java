@@ -270,8 +270,8 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             tv_tab_title.setText(mTabEntitys.get(position).getTabTitle());
         }
         ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
-        if (mTabEntitys.get(position).getBottom() != null){
-            if (imageLoaderListener != null) imageLoaderListener.loadUnSelectImage(iv_tab_icon,mTabEntitys.get(position).getBottom().getBgicon(),mTabEntitys.get(position).getTabUnselectedIcon());
+        if (mTabEntitys.get(position).getBottom() != null && imageLoaderListener != null){
+             imageLoaderListener.loadUnSelectImage(iv_tab_icon,mTabEntitys.get(position).getBottom().getBgicon(),mTabEntitys.get(position).getTabUnselectedIcon());
         }else{
             iv_tab_icon.setImageResource(mTabEntitys.get(position).getTabUnselectedIcon());
         }
@@ -296,7 +296,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
                 }
             }
             private void showDialog(String message) {
-                AlertDialog dialog = new AlertDialog.Builder(getContext(),android.R.style.Theme_DeviceDefault_Dialog_Alert)
+                AlertDialog dialog = new AlertDialog.Builder(getContext(),android.R.style.Theme_Material_Light_Dialog_Alert)
                         .setMessage(message)
                         .setPositiveButton("确定",null)
                         .create();
@@ -336,11 +336,9 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             if (mIconVisible) {
                 iv_tab_icon.setVisibility(View.VISIBLE);
                 CustomTabEntity tabEntity = mTabEntitys.get(i);
-                if (tabEntity.getBottom() !=null){
-                    if (imageLoaderListener != null) {
-                        if (i == mCurrentTab){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
-                        else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
-                    }
+                if (tabEntity.getBottom() !=null && imageLoaderListener != null){
+                    if (i == mCurrentTab){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
+                    else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
                 }else{
                     iv_tab_icon.setImageResource(i == mCurrentTab ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
                 }
@@ -372,11 +370,9 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             tab_title.setTextColor(isSelect ? mTextSelectColor : mTextUnselectColor);
             ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
             CustomTabEntity tabEntity = mTabEntitys.get(i);
-            if (tabEntity.getBottom() != null){
-                if (imageLoaderListener != null) {
-                    if (isSelect){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
-                    else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
-                }
+            if (tabEntity.getBottom() != null && imageLoaderListener != null){
+                if (isSelect){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
+                else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
             }else {
                 iv_tab_icon.setImageResource(isSelect ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
             }

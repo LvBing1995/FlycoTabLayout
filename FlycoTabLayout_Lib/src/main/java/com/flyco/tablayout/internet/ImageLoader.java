@@ -2,23 +2,29 @@ package com.flyco.tablayout.internet;
 
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import me.bzcoder.easyglide.EasyGlide;
+import me.bzcoder.easyglide.config.GlideConfigImpl;
 
 public class ImageLoader implements ImageLoaderListener {
 
-
     @Override
     public void loadSelectImage(ImageView imageView, String selectedUrl, int placeholderId) {
-        Glide.with(imageView.getContext()).load(selectedUrl)
-                .apply(new RequestOptions().placeholder(placeholderId).error(placeholderId))
-                .into(imageView);
+        EasyGlide.loadImage(imageView.getContext(),getImageConfig(imageView,selectedUrl,placeholderId));
     }
 
     @Override
     public void loadUnSelectImage(ImageView imageView, String unSelectedUrl, int placeholderId) {
-        Glide.with(imageView.getContext()).load(unSelectedUrl)
-                .apply(new RequestOptions().placeholder(placeholderId).error(placeholderId))
-                .into(imageView);
+        EasyGlide.loadImage(imageView.getContext(),getImageConfig(imageView,unSelectedUrl,placeholderId));
+    }
+
+    public GlideConfigImpl getImageConfig(ImageView imageView,String url,int placeholderId){
+        GlideConfigImpl glideConfig = GlideConfigImpl.builder()
+                .errorPic(placeholderId)
+                .placeholder(placeholderId)
+                .url(url)
+                .imageView(imageView)
+                .build();
+
+        return glideConfig;
     }
 }
