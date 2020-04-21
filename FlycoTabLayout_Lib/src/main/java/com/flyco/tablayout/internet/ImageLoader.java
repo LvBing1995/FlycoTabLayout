@@ -3,6 +3,7 @@ package com.flyco.tablayout.internet;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 public class ImageLoader implements ImageLoaderListener {
 
@@ -11,8 +12,7 @@ public class ImageLoader implements ImageLoaderListener {
 
         Glide.with(imageView.getContext())
                 .load(selectedUrl)
-                .placeholder(placeholderId)
-                .error(placeholderId)
+                .apply(new RequestOptions().placeholder(placeholderId).error(placeholderId))
                 .into(imageView);
     }
 
@@ -20,8 +20,7 @@ public class ImageLoader implements ImageLoaderListener {
     public void loadUnSelectImage(ImageView imageView, String unSelectedUrl, int placeholderId) {
         Glide.with(imageView.getContext())
                 .load(unSelectedUrl)
-                .placeholder(placeholderId)
-                .error(placeholderId)
+                .apply(new RequestOptions().placeholder(placeholderId).error(placeholderId))
                 .into(imageView);
     }
 
