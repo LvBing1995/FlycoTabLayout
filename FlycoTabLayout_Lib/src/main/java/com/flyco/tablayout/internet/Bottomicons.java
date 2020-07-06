@@ -10,6 +10,7 @@ public class Bottomicons {
      * sort : 0
      * status : 1
      * remind : 禁用了
+     * erectHeight : zzz
      */
 
     private String icon;
@@ -19,6 +20,7 @@ public class Bottomicons {
     private int sort;
     private int status;
     private String remind;
+    private int erectHeight = -1;//特殊TabView需要超出原来父容器高度
 
     public String getIcon() {
         return icon;
@@ -74,5 +76,13 @@ public class Bottomicons {
 
     public void setRemind(String remind) {
         this.remind = remind;
+    }
+
+    public int getErectHeight() {
+        return erectHeight;
+    }
+
+    public void setErectHeight(int erectHeight) {
+        this.erectHeight = erectHeight;
     }
 }

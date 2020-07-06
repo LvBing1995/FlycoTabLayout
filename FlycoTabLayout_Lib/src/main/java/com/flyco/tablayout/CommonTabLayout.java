@@ -27,8 +27,10 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.flyco.tablayout.internet.Bottomicons;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.internet.ImageLoaderListener;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -144,6 +146,8 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
 
         this.mContext = context;
         mTabsContainer = new LinearLayout(context);
+        mTabsContainer.setClipChildren(false);
+        mTabsContainer.setClipToPadding(false);
         addView(mTabsContainer);
 
         obtainAttributes(context, attrs);
@@ -303,17 +307,25 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
                 dialog.show();
             }
         });
-
         /** 每一个Tab的布局参数 */
         LinearLayout.LayoutParams lp_tab = mTabSpaceEqual ?
-                new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f) :
-                new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                new LinearLayout.LayoutParams(0,isErectHeight(position) ? mTabEntitys.get(position).getBottom().getErectHeight() : LayoutParams.MATCH_PARENT, 1.0f) :
+                new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, isErectHeight(position) ? mTabEntitys.get(position).getBottom().getErectHeight() : LayoutParams.MATCH_PARENT);
+        lp_tab.gravity = Gravity.BOTTOM;
         if (mTabWidth > 0) {
             lp_tab = new LinearLayout.LayoutParams((int) mTabWidth, LayoutParams.MATCH_PARENT);
         }
-        mTabsContainer.addView(tabView, position, lp_tab);
+        mTabsContainer.addView(tabView, position,lp_tab);
     }
-
+    private boolean isErectHeight(int position){
+        if (mTabEntitys == null || mTabEntitys.size() <= position || mTabEntitys.get(position).getBottom() == null) return false;
+        Bottomicons bottomicons = mTabEntitys.get(position).getBottom();
+        if (bottomicons.getErectHeight() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
     private void updateTabStyles() {
         for (int i = 0; i < mTabCount; i++) {
             View tabView = mTabsContainer.getChildAt(i);
