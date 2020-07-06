@@ -10,10 +10,24 @@ public class TabEntity implements CustomTabEntity {
     public int selectedIcon;
     public int unSelectedIcon;
     public Bottomicons bottomicons;
+    private int erectHeight = -1;//特殊TabView需要超出原来父容器高度
     public TabEntity(String title, int selectedIcon, int unSelectedIcon) {
         this.title = title;
         this.selectedIcon = selectedIcon;
         this.unSelectedIcon = unSelectedIcon;
+    }
+    public TabEntity(String title, int selectedIcon, int unSelectedIcon,int erectHeight) {
+        this.title = title;
+        this.selectedIcon = selectedIcon;
+        this.unSelectedIcon = unSelectedIcon;
+        this.erectHeight = erectHeight;
+    }
+    public TabEntity(String title, int selectedIcon, int unSelectedIcon,int erectHeight, Bottomicons bottomicons) {
+        this.title = title;
+        this.selectedIcon = selectedIcon;
+        this.unSelectedIcon = unSelectedIcon;
+        this.erectHeight = erectHeight;
+        this.bottomicons = bottomicons;
     }
     public TabEntity(String title, int selectedIcon, int unSelectedIcon, Bottomicons bottomicons) {
         this.title = title;
@@ -34,6 +48,10 @@ public class TabEntity implements CustomTabEntity {
     @Override
     public int getTabUnselectedIcon() {
         return unSelectedIcon;
+    }
+
+    public int getErectHeight() {
+        return erectHeight;
     }
 
     @Override

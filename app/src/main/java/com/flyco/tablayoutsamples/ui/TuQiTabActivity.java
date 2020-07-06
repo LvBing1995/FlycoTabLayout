@@ -38,14 +38,17 @@ public class TuQiTabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tuqi_tab);
 
         commonTabLayout = findViewById(R.id.common_tab_layout);
-
         String jsonString = getJson("haha",this);
         final List<Bottomicons> list = new Gson().fromJson(jsonString,new TypeToken<List<Bottomicons>>(){}.getType());
         for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i],list.get(i)));
+            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
         }
-       // commonTabLayout.setImageLoaderListener(new ImageLoader()).setTabData(mTabEntities);
-        commonTabLayout.setTabData(mTabEntities);
+        mTabEntities.clear();
+        for (int i = 0; i < mTitles.length; i++) {
+            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+        }
+        commonTabLayout.setImageLoaderListener(new ImageLoader()).setTabData(mTabEntities);
+        //commonTabLayout.setTabData(mTabEntities);
 
     }
 
