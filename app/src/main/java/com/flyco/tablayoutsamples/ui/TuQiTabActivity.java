@@ -30,7 +30,7 @@ public class TuQiTabActivity extends AppCompatActivity {
             R.drawable.sign_select, R.mipmap.tab_speech_unselect,
             R.mipmap.tab_contact_unselect, R.mipmap.tab_more_unselect};
     private int[] mIconSelectIds = {
-            R.mipmap.tab_home_unselect, R.mipmap.tab_speech_select,
+            R.drawable.sign_select, R.mipmap.tab_speech_select,
             R.mipmap.tab_contact_select, R.mipmap.tab_more_select};
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,13 +41,15 @@ public class TuQiTabActivity extends AppCompatActivity {
         String jsonString = getJson("haha",this);
         final List<Bottomicons> list = new Gson().fromJson(jsonString,new TypeToken<List<Bottomicons>>(){}.getType());
         for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
-        }
-        mTabEntities.clear();
-        for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+            if (i == 0){
+                mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i],70));
+            }else{
+
+                mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+            }
         }
         commonTabLayout.setImageLoaderListener(new ImageLoader()).setTabData(mTabEntities);
+       // commonTabLayout.setIconMarginByPosition(0,30);
         //commonTabLayout.setTabData(mTabEntities);
 
     }
