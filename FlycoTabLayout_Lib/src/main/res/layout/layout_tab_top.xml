@@ -6,7 +6,6 @@
     android:layout_height="80dp"
     android:layout_gravity="bottom"
     android:clipChildren="false"
-    android:background="#f0f"
     android:clipToPadding="false">
 
     <LinearLayout
@@ -15,13 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:background="#ff0"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_tab_icon"
             android:layout_width="wrap_content"
-            android:src="@drawable/sign_select"
             android:layout_height="wrap_content" />
 
         <TextView
