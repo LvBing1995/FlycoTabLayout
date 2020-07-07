@@ -49,7 +49,7 @@ public class TuQiTabActivity extends AppCompatActivity {
             }
         }
         commonTabLayout.setImageLoaderListener(new ImageLoader()).setTabData(mTabEntities);
-       // commonTabLayout.setIconMarginByPosition(0,30);
+        commonTabLayout.setIconMarginByPosition(0,10);
         //commonTabLayout.setTabData(mTabEntities);
 
     }

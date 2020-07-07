@@ -700,49 +700,29 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
         this.mIconMargin = dp2px(iconMargin);
         updateTabStyles();
     }
-    public void setIconMarginByPosition(int position,float iconMargin) {
-        iconMargin = dp2px(iconMargin);
-        for (int i = 0; i < mTabCount; i++) {
-            View tabView = mTabsContainer.getChildAt(i);
-            ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
-            if (mIconVisible) {
-                iv_tab_icon.setVisibility(View.VISIBLE);
-                CustomTabEntity tabEntity = mTabEntitys.get(i);
-                if (tabEntity.getBottom() !=null && imageLoaderListener != null){
-                    if (i == mCurrentTab){imageLoaderListener.loadSelectImage(iv_tab_icon,tabEntity.getBottom().getIcon(),tabEntity.getTabSelectedIcon());}
-                    else{imageLoaderListener.loadUnSelectImage(iv_tab_icon,tabEntity.getBottom().getBgicon(),tabEntity.getTabUnselectedIcon());}
-                }else{
-                    iv_tab_icon.setImageResource(i == mCurrentTab ? tabEntity.getTabSelectedIcon() : tabEntity.getTabUnselectedIcon());
-                }
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconWidth,
-                        dp2px(mTabEntitys.get(i).getErectHeight()) > 0 ?  dp2px(mTabEntitys.get(i).getErectHeight()) : (mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconHeight));
-                if (i == position){
-                    if (mIconGravity == Gravity.LEFT) {
-                        lp.rightMargin = (int) iconMargin;
-                    } else if (mIconGravity == Gravity.RIGHT) {
-                        lp.leftMargin = (int) iconMargin;
-                    } else if (mIconGravity == Gravity.BOTTOM) {
-                        lp.topMargin = (int) iconMargin;
-                    } else {
-                        lp.bottomMargin = (int) iconMargin;
-                    }
-                }else{
-                    if (mIconGravity == Gravity.LEFT) {
-                        lp.rightMargin = (int) mIconMargin;
-                    } else if (mIconGravity == Gravity.RIGHT) {
-                        lp.leftMargin = (int) mIconMargin;
-                    } else if (mIconGravity == Gravity.BOTTOM) {
-                        lp.topMargin = (int) mIconMargin;
-                    } else {
-                        lp.bottomMargin = (int) mIconMargin;
-                    }
-                }
-
-                iv_tab_icon.setLayoutParams(lp);
+    public void setIconMarginByPosition(int position,float iconPading) {
+        if (mTabsContainer == null || mTabsContainer.getChildCount() <= position) return;
+        View tabView = mTabsContainer.getChildAt(position);
+        ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
+        if (mIconVisible) {
+            iv_tab_icon.setVisibility(View.VISIBLE);
+            CustomTabEntity tabEntity = mTabEntitys.get(position);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconWidth,
+                    dp2px(tabEntity.getErectHeight()) > 0 ?  dp2px(tabEntity.getErectHeight()) : (mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconHeight));
+            if (mIconGravity == Gravity.LEFT) {
+                iv_tab_icon.setPadding(0,0, dp2px(iconPading), 0);
+            } else if (mIconGravity == Gravity.RIGHT) {
+                iv_tab_icon.setPadding( dp2px(iconPading),0,0, 0);
+            } else if (mIconGravity == Gravity.BOTTOM) {
+                iv_tab_icon.setPadding(0, dp2px(iconPading),0,0);
             } else {
-                iv_tab_icon.setVisibility(View.GONE);
+                iv_tab_icon.setPadding(0,0,0, dp2px(iconPading));
             }
+            iv_tab_icon.setPadding(0,0,0, dp2px(iconPading));
+            iv_tab_icon.setLayoutParams(lp);
+        } else {
+            iv_tab_icon.setVisibility(View.GONE);
         }
     }
     public void setTextAllCaps(boolean textAllCaps) {
