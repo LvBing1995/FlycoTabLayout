@@ -702,7 +702,6 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
     }
     public void setIconMarginByPosition(int position,float iconMargin) {
         iconMargin = dp2px(iconMargin);
-        Log.i("吕冰","mTabCount="+mTabCount);
         for (int i = 0; i < mTabCount; i++) {
             View tabView = mTabsContainer.getChildAt(i);
             ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
@@ -719,7 +718,6 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
                         mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconWidth,
                         dp2px(mTabEntitys.get(i).getErectHeight()) > 0 ?  dp2px(mTabEntitys.get(i).getErectHeight()) : (mIconWidth <= 0 ? LinearLayout.LayoutParams.WRAP_CONTENT : (int) mIconHeight));
                 if (i == position){
-                    Log.i("吕冰","cccc="+iconMargin);
                     if (mIconGravity == Gravity.LEFT) {
                         lp.rightMargin = (int) iconMargin;
                     } else if (mIconGravity == Gravity.RIGHT) {
@@ -730,7 +728,6 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
                         lp.bottomMargin = (int) iconMargin;
                     }
                 }else{
-                    Log.i("吕冰","mIconMargin="+mIconMargin);
                     if (mIconGravity == Gravity.LEFT) {
                         lp.rightMargin = (int) mIconMargin;
                     } else if (mIconGravity == Gravity.RIGHT) {
